@@ -1,92 +1,76 @@
 import { RAD2DEG, DEG2RAD, TAU } from './const';
 
 /**
- * Component-wise addition of two arrays/vectors.
- * If target is NOT specified, the first argument will
- * be mutated. Target will be overwritten and NOT included in the sum.
- * @param {number[]} to left operand
- * @param {number[]} from right operand
- * @param {number[]} target optional array/vector to store the result
- * @return {number[]} array/vector
+ * v1 + v2
+ *
+ * Component-wise addition of two n-dimensional vectors.
+ * Target is used to store the results.
+ * @param {number[]} v1 Left operand
+ * @param {number[]} v2 Right operand
+ * @param {number[]} target Target for storing the results
+ * @return {number[]} Resulting vector
  */
-export function add(to, from, target = null) {
-  if (target) {
-    if (target.length === 0) target.length = to.length;
-  } else {
-    target = to;
-  }
-  for (let i = 0; i < target.length; i++) {
-    target[i] = to[i] + from[i];
+export function add(v1, v2, target) {
+  if (!target) target = v1;
+  for (let n = 0; n < target.length; n++) {
+    target[n] = v1[n] + v2[n];
   }
   return target;
 }
 
 /**
- * Component-wise addition of one vector with a scaled version of another vector.
- * If target is NOT specified, the first argument will
- * be mutated. Target will be overwritten and NOT included in the sum.
- * @param {number[]} to left operand
- * @param {number[]} from right operand
- * @param {number} factor scaling factor to apply to from-vector
- * @param {number[]} target optional array/vector to store the result
- * @return {number[]} array/vector
+ * v1 + (v2 * factor)
+ *
+ * Component-wise addition of two n-dimensional vectors, where
+ * the second is scaled by a given factor. Target is used to
+ * store the results.
+ * @param {number[]} v1 Left operand
+ * @param {number[]} v2 Right operand
+ * @param {number} factor Factor used to scale right operand
+ * @param {number[]} target Target for storing the results
+ * @return {number[]} Resulting vector
  */
-export function addScaled(to, from, factor, target = null) {
-  if (target) {
-    if (target.length === 0) target.length = to.length;
-  } else {
-    target = to;
-  }
-  for (let i = 0; i < target.length; i++) {
-    target[i] = to[i] + from[i] * factor;
+export function addScaled(v1, v2, factor, target) {
+  if (!target) target = v1;
+  for (let n = 0; n < target.length; n++) {
+    target[n] = v1[n] + v2[n] * factor;
   }
   return target;
 }
 
 /**
- * Component-wise addition of a set of arrays/vectors.
- * If target is NOT specified, the first element in the set will
- * be mutated. Target (if it has valid values) WILL be included in the sum.
- * @param {number[][]} vectors Array of equally length arrays/vectors (to be added)
- * @param {number[]} target optional array/vector to add into
- * @return {number[]} array/vector
+ * v1 + ... + vM
+ *
+ * Component-wise addition of M n-dimensional vectors. Target is
+ * used to store the results.
+ * @param {number[][]} vectors Array of vectors with length n.
+ * @param {number[]} target Target for storing the results
+ * @return {number[]} Resulting vector
  */
-export function addAll(vectors, target = null) {
-  let start = 0;
-  if (!target) {
-    target = vectors[0];
-    start++;
-  }
-
-  for (let i = start; i < vectors.length; i++) {
-    for (let j = 0; j < vectors[i].length; j++) {
-      if (i === 0 && !Number.isFinite(target[j])) {
-        target[j] = vectors[i][j];
-      } else {
-        target[j] += vectors[i][j];
-      }
+export function addAll(vectors, target) {
+  if (!target) target = vectors[0];
+  for (let m = 1; m < vectors.length; m++) {
+    for (let n = 0; n < target.length; n++) {
+      target[n] += vectors[m][n];
     }
   }
   return target;
 }
 
 /**
- * Component-wise subtraction of two arrays/vectors.
- * If target is NOT specified, the first argument will
- * be mutated. Target will be overwritten and NOT included in the sum.
- * @param {number[]} from left operand
- * @param {number[]} vector right operand
- * @param {number[]} target optional array/vector to store the result
- * @return {number[]} array/vector
+ * v1 - v2
+ *
+ * Component-wise subtraction of two n-dimensional vectors.
+ * Target is used to store the results.
+ * @param {number[]} v1 Left operand
+ * @param {number[]} v2 Right operand
+ * @param {number[]} target Target for storing the results
+ * @return {number[]} Resulting vector
  */
-export function sub(from, vector, target = null) {
-  if (target) {
-    if (target.length === 0) target.length = from.length;
-  } else {
-    target = from;
-  }
-  for (let i = 0; i < target.length; i++) {
-    target[i] = from[i] - vector[i];
+export function sub(v1, v2, target) {
+  if (!target) target = v1;
+  for (let n = 0; n < target.length; n++) {
+    target[n] = v1[n] - v2[n];
   }
   return target;
 }
@@ -160,99 +144,59 @@ export function vec(from, to, target = null) {
       target[i] = to[i];
     }
   }
-  return sub(target, from);
+  return sub(target, from, target);
 }
 
 /**
- * Component-wise scaling of an array or vector
- * @param {number[]} arr array/vector to scale
+ * Component-wise scaling of vector.
+ * @param {number[]} v Vector to scale
  * @param {number} factor scaling factor
- * @param {number[]} target optional array/vector to store the result
- * @return {number[]} scaled array/vector
+ * @param {number[]} target Target for storing the results
+ * @return {number[]} Resulting vector
  */
-export function scale(arr, factor, target = null) {
-  target = target || arr;
-  for (let i = 0; i < arr.length; i++) {
-    target[i] = arr[i] * factor;
+export function scale(v, factor, target) {
+  if (!target) target = v;
+  for (let i = 0; i < v.length; i++) {
+    target[i] = v[i] * factor;
   }
   return target;
 }
 
 /**
  * Computes the sum of squares
- * @param {number[]} arr array/vector to compute
+ * @param {number[]} v Target vector
  * @return {number}
  */
-export function sumsqr(arr) {
-  return arr.reduce((sum, v) => sum + v ** 2, 0);
+export function sumsqr(v) {
+  let sum = 0;
+  for (let i = 0; i < v.length; i++) {
+    sum += v[i] ** 2;
+  }
+  return sum;
 }
 
 /**
- * Computes the scalar value (length) of a vector
- * @param {number[]} vector array/vector to compute
+ * Computes the length of a vector.
+ * @param {number[]} v Target vector
  * @return {number}
  */
-export function scalar(vector) {
-  const sq = sumsqr(vector);
+export function magnitude(v) {
+  const sq = sumsqr(v);
   if (sq === 0) return sq;
   return Math.sqrt(sq);
 }
 
 /**
- * Normalizes an array/vector
- * @param {number[]} vector array/vector to notmalize
- * @param {number[]} target optional array/vector to store the result
- * @return {number[]} normalized array/vector
+ * Normalizes a vector
+ * @param {number[]} v Vector to normalize
+ * @param {number[]} target Target for storing the results
+ * @return {number[]} Resulting vector
  */
-export function norm(vector, target = null) {
-  target = target || vector;
-  const sc = scalar(vector);
-  const f = sc === 0 ? 0 : 1 / sc;
-  return scale(vector, f, target);
-}
-
-/**
- * Describes relationships between two points.
- * @param {number[]} from start coordinates
- * @param {number[]} to end coordinates
- * @param {number[]} target optional array/vector to store the result
- * @return {{vector: number[], sqr: number, distance: number, unit: number[]}}
- */
-export function descr(from, to, target = null) {
-  if (!target) {
-    target = to.slice();
-  } else {
-    if (target.length === 0) {
-      target.length = to.length;
-    }
-    for (let i = 0; i < target.length; i++) {
-      target[i] = to[i];
-    }
-  }
-  const vector = sub(target, from);
-  const sqr = sumsqr(vector);
-  const dst = Math.sqrt(sqr);
-  const unit = scale(vector, dst > 0 ? 1 / dst : 0, vector.slice());
-  return {
-    vector,
-    sqr,
-    dist: dst,
-    unit,
-  };
-}
-
-/**
- * Get a unit vector that is perpendicular to the input vector. Only for 2d vectors!
- * @param {number[]} vector 2d vector
- * @param {number[]} target optional array/vector to store the resulting vector
- * @return {number[]} normalized, perpendicular vector
- */
-export function orth2(vector, target = null) {
-  target = target || vector;
-  const x = -vector[1];
-  target[1] = vector[0];
-  target[0] = x;
-  return norm(target);
+export function normalize(v, target) {
+  if (!target) target = v;
+  const len = magnitude(v);
+  const f = len === 0 ? 0 : 1 / len;
+  return scale(v, f, target);
 }
 
 /**
@@ -276,15 +220,6 @@ export function angle(vector, axis = 0) {
 }
 
 /**
- * Find the axis aligned angle of a 2d vector
- * @param {number[]} vector
- * @return {number} angle in radians
- */
-export function angle2(vector) {
-  return Math.atan2(vector[1], vector[0]);
-}
-
-/**
  * Get a unit vector between two points/coordinates. This function
  * does not mutate any arguments, but a target may still be used to
  * control the return type or to avoid creating additional arrays.
@@ -294,7 +229,7 @@ export function angle2(vector) {
  * @return {number[]} unit vector between from and to
  */
 export function dir(from, to, target = null) {
-  return norm(vec(from, to, target));
+  return normalize(vec(from, to, target), new Array(from.length));
 }
 
 /**
@@ -304,17 +239,21 @@ export function dir(from, to, target = null) {
  * @return {number} distance
  */
 export function dist(p1, p2) {
-  return scalar(vec(p1, p2));
+  return magnitude(vec(p1, p2));
 }
 
 /**
- * Calculate the dot product between two vectors
- * @param {number[]} v1 left hand operand
- * @param {number[]} v2 right hand operand
- * @return {number} the dot product
+ * Calculate the dot product between two vectors.
+ * @param {number[]} v1 Left hand operand
+ * @param {number[]} v2 Right hand operand
+ * @return {number} Dot product
  */
 export function dot(v1, v2) {
-  return v1.reduce((sum, c, i) => sum + c * v2[i], 0);
+  let sum = 0;
+  for (let i = 0; i < v1.length; i++) {
+    sum += v1[i] * v2[i];
+  }
+  return sum;
 }
 
 /**
@@ -342,16 +281,6 @@ export function cross(v1, v2, target = null) {
  */
 export function triple(v1, v2, v3) {
   return dot(v1, cross(v2, v3));
-}
-
-/**
- * Find the psudo cross product between two 2d vectors
- * @param {number[]} v1 left hand operand (2d vector)
- * @param {number[]} v2 right hand operand (2d vector)
- * @return {number} signed area of the parallellogram defined by v1 and v2
- */
-export function cross2(v1, v2) {
-  return (v1[0] * v2[1]) - (v1[1] * v2[0]);
 }
 
 /**

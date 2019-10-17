@@ -1,10 +1,10 @@
 /* eslint-disable comma-spacing */
 import expect from 'expect';
-import { Matrix, mat2, mat3, mat4 } from '../src/matrix';
-import { Vector } from '../src/vector';
+import { Matrix, mat2, mat3, mat4 } from '../src/Matrix';
+import { Vector } from '../src/Vector';
 
 
-describe('matrix.js', () => {
+describe('Matrix.js', () => {
   it('should be possible to instantiate and assign values using factory functions', () => {
     expect(new Matrix().length).toBe(16);
     expect(new Matrix(2).length).toBe(4);

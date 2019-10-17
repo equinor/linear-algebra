@@ -1,9 +1,9 @@
 import expect from 'expect';
-import { Vector, nvec, vec2, vec3, vec4 } from '../src/vector';
+import { Vector, nvec, vec2, vec3, vec4 } from '../src/Vector';
 
 
-describe('vector.js', () => {
-  it('should be possible to instantiate and assign values using factory functions', () => {
+describe('Vector.js', () => {
+  it('Should be possible to instantiate and assign values using factory functions', () => {
     expect(vec3()).toEqual([0, 0, 0]);
     expect(vec4(1)).toEqual([1, 1, 1, 1]);
     expect(vec3(vec2(1, 2), 3)).toEqual([1, 2, 3]);
@@ -15,7 +15,7 @@ describe('vector.js', () => {
     expect(new Vector(4)).toEqual(new Array(4));
   });
 
-  it('should be able to use array getters/setters and extended/added vector getter/setters', () => {
+  it('Should be able to use array getters/setters and extended/added vector getter/setters', () => {
     const v = vec4(1, 2, 3, 4);
 
     expect(v[0]).toBe(1);
@@ -57,7 +57,7 @@ describe('vector.js', () => {
     expect(swizzled).toEqual([1, 1, 3, 6]);
   });
 
-  it('should be possible to clone vector', () => {
+  it('Should be possible to clone vector', () => {
     const v = vec2(-3, 2);
     const clone = v.clone();
     expect(clone).toEqual(v);
@@ -67,7 +67,7 @@ describe('vector.js', () => {
     expect(clone).toEqual([-3, 2]);
   });
 
-  it('should be mappable to float32 array', () => {
+  it('Should be mappable to float32 array', () => {
     const v = vec4(1.002, 2.3245, -3.6612, 4.3);
     const f = new Float32Array(v);
     expect(f).toBeInstanceOf(Float32Array);
@@ -77,22 +77,21 @@ describe('vector.js', () => {
     expect(f[3]).toBeCloseTo(4.3);
   });
 
-  it('should be possible to add/subtract two vectors', () => {
+  it('Should be possible to add/subtract two vectors', () => {
     const v1 = vec2(-3, 2);
     const v2 = vec2(3, -7);
     expect(v1.add(v2)).toEqual([0, -5]);
-    expect(v1).toEqual([0, -5]);
+    expect(v1).toEqual([-3, 2]);
 
     v1.set(-3, 2);
 
     expect(v2.sub(v1)).toEqual([6, -9]);
   });
 
-  it('should be possible to add/subtract a scaled version of a vector', () => {
+  it('Should be possible to add/subtract a scaled version of a vector', () => {
     const v1 = vec2(-3, 2);
     const v2 = vec2(3, -7);
     expect(v1.add(v2)).toEqual([0, -5]);
-    expect(v1).toEqual([0, -5]);
 
     v1.set(-3, 2);
 
@@ -108,7 +107,7 @@ describe('vector.js', () => {
 
   });
 
-  it('should be possible to add/subtract multiple vectors', () => {
+  it('Should be possible to add/subtract multiple vectors', () => {
     const vectors = [
       vec2(1, 4),
       vec2(-2, 0),
@@ -122,27 +121,22 @@ describe('vector.js', () => {
     expect(v2.sub(...vectors)).toEqual([-9, 1]);
   });
 
-  it('should calculate the vector scalar (length)', () => {
+  it('Should calculate the vector scalar (length)', () => {
     const v = vec2(-3, 2);
-    expect(v.scalar()).toBeCloseTo(Math.sqrt(13));
+    expect(v.magnitude).toBeCloseTo(Math.sqrt(13));
   });
 
-  it('should be able to scale vector', () => {
+  it('Should be able to scale vector', () => {
     const v = vec2(-3, 2);
     expect(v.scale(2)).toEqual([-6, 4]);
   });
 
-  it('should be able to negate a vector', () => {
+  it('Should be able to negate a vector', () => {
     const v = vec2(-3, 2);
     expect(v.negate()).toEqual([3, -2]);
   });
 
-  it('should be able to calculate the psudo cross product of two 2d vectors', () => {
-    const v = vec2(-3, 2);
-    expect(v.cross2([1, 1])).toBe(-5);
-  });
-
-  it('should be able to calculate the distance between two vectors', () => {
+  it('Should be able to calculate the distance between two vectors', () => {
     const v1 = vec2(-3, 2);
     const v2 = vec2(3, -7);
     expect(v1.distance(v2)).toBeCloseTo(10.8166538);

@@ -8,18 +8,13 @@ import {
   subAll,
   subScaled,
   sumsqr,
-  scalar,
-  norm,
+  normalize,
   scale,
   dist,
   dir,
-  orth2,
-  descr,
-  angle2,
   angle,
   dot,
   cross,
-  cross2,
   triple,
   clamp,
   step,
@@ -33,13 +28,18 @@ import {
   seq,
   seqI,
   isNullVec,
+  magnitude,
 } from '../src/functions';
+import {
+  angle as angle2,
+  cross as cross2,
+} from '../src/functions2D';
 import { PI, TAU, SPI, QPI } from '../src/const';
-import { Vector, vec2, vec3, vec4 } from '../src/vector';
-import { Matrix, mat2 } from '../src/matrix';
+import { Vector, vec2, vec3, vec4 } from '../src/Vector';
+import { Matrix, mat2 } from '../src/Matrix';
 
 describe('functions.js', () => {
-  it('should be able to create a vector from two points', () => {
+  it('Should be able to create a vector from two points', () => {
     const p1 = [-1, 0, 2];
     const p2 = [2, -3, 1];
 
@@ -52,7 +52,7 @@ describe('functions.js', () => {
     expect(vec(p1, p2, new Vector(3))).toBeInstanceOf(Vector);
   });
 
-  it('should be able to add and subtract vectors/arrays', () => {
+  it('Should be able to add and subtract vectors', () => {
     /* single */
     const v1 = vec3(1, 2, 3);
     const v2 = vec3(2, -2, -1);
@@ -60,11 +60,11 @@ describe('functions.js', () => {
     const a1 = [1, 2, 3];
     const a2 = [2, -2, -1];
 
-    let res = add(v1, v2, new Vector());
+    let res = add(v1, v2, new Vector(3));
     expect(res).toEqual([3, 0, 2]);
     expect(res).toBeInstanceOf(Vector);
 
-    res = add(a1, a2, new Vector());
+    res = add(a1, a2, new Vector(3));
     expect(res).toEqual([3, 0, 2]);
     expect(res).toBeInstanceOf(Vector);
 
@@ -101,7 +101,7 @@ describe('functions.js', () => {
     expect(res).toBe(v1);
     expect(v2).toEqual([2, -2, -1]); // should not be mutated
 
-    res = sub(a1, v2, new Vector());
+    res = sub(a1, v2, new Vector(3));
     expect(res).toEqual([-1, 4, 4]);
     expect(res).toBeInstanceOf(Vector);
 
@@ -125,28 +125,28 @@ describe('functions.js', () => {
       [-3.7, 4.5],
     ];
 
-    res = addAll(vectors, vec2());
+    res = addAll(vectors, vectors[0].slice(0));
     expect(res).toBeInstanceOf(Vector);
     expect(res).toEqual([-5.7, 6]);
 
     expect(vectors[0]).toEqual([1, -1]);
 
     // we're adding a target to avoid mutation of the first element in vectors
-    res = addAll(vectors, vec2());
+    res = addAll(vectors, Vector.fromArray(vectors[0]));
     expect(res).toEqual([-5.7, 6]);
     expect(vectors[0]).toEqual([1, -1]);
 
     // this will mutate the first vector in vectors
-    res = addAll(vectors);
+    res = addAll(vectors, vectors[0]);
     expect(vectors[0]).toEqual([-5.7, 6]);
 
     // vectors can also be plain arrays.
-    res = addAll(arrays, vec2());
+    res = addAll(arrays, Vector.fromArray(arrays[0]));
     expect(res).toBeInstanceOf(Vector);
     expect(res).toEqual([-5.7, 6]);
 
     // return result as plain array
-    res = addAll(arrays, [0, 0]);
+    res = addAll(arrays, arrays[0].slice(0));
     expect(res).toBeInstanceOf(Array);
     expect(res).toEqual([-5.7, 6]);
 
@@ -178,43 +178,43 @@ describe('functions.js', () => {
     expect(res).toEqual([2, 2]);
   });
 
-  it('can calculate the sum of squares', () => {
+  it('Can calculate the sum of squares', () => {
     expect(sumsqr([1, 3, 4])).toBe(26);
     expect(sumsqr(vec3(-3, -3, 2))).toBe(22);
   });
 
-  it('can calculate the scalar of a vector/array', () => {
-    expect(scalar([1, 3, 4])).toBeCloseTo(Math.sqrt(26));
-    expect(scalar(vec3(-3, -3, 2))).toBeCloseTo(Math.sqrt(22));
+  it('Can calculate the scalar of a vector/array', () => {
+    expect(magnitude([1, 3, 4])).toBeCloseTo(Math.sqrt(26));
+    expect(magnitude(vec3(-3, -3, 2))).toBeCloseTo(Math.sqrt(22));
   });
 
-  it('can normalize a vector/array', () => {
+  it('Can normalize a vector/array', () => {
     const vector = [2, 3.4, -2];
     const expected = [0.4522156, 0.76876657, -0.4522156];
-    let actual = norm(vector, new Vector()); // immutable
+    let actual = normalize(vector, new Vector(3)); // immutable
 
     expect(actual).not.toBe(vector);
     expect(actual).toBeInstanceOf(Vector);
     actual.forEach((d, i) => expect(d).toBeCloseTo(expected[i]));
 
-    actual = norm(vector); // mutate vector
+    actual = normalize(vector); // mutate vector
 
     expect(actual).toBe(vector);
     expect(actual).toBeInstanceOf(Array);
     actual.forEach((d, i) => expect(d).toBeCloseTo(expected[i]));
   });
 
-  it('can scale a vector/array by a factor', () => {
+  it('Can scale a vector/array by a factor', () => {
     expect(scale([1, 2, 3], 3)).toEqual([3, 6, 9]); // mutating
-    expect(scale([1, 2, 3], -1, [])).toEqual([-1, -2, -3]); // immutable
+    expect(scale([1, 2, 3], -1, new Array(3))).toEqual([-1, -2, -3]); // immutable
   });
 
-  it('should find the distance between two points', () => {
+  it('Should find the distance between two points', () => {
     expect(dist([10, 0], [-10, 0])).toBe(20);
     expect(dist(vec3(10, 2, -5), [-3, 0, 2])).toBeCloseTo(14.899664);
   });
 
-  it('should find the directional unit vector between two points', () => {
+  it('Should find the directional unit vector between two points', () => {
     expect(dir([10, 0], [-10, 0])).toEqual([-1, 0]);
 
     let expected = [-0.872503, -0.134231, 0.469809];
@@ -227,56 +227,20 @@ describe('functions.js', () => {
     dir([0, 3], [3, 0], []).forEach((v, i) => expect(v).toBeCloseTo(expected[i]));
   });
 
-  it('should describe relationships between two points', () => {
-    let res = descr([10, -3], [8, 2]);
-    expect(res.vector).toBeInstanceOf(Array);
-    expect(res.unit).toBeInstanceOf(Array);
-    expect(res.vector).toEqual([-2, 5]);
-    expect(res.sqr).toBe(29);
-    expect(res.dist).toBeCloseTo(5.3851648);
-    const expected = [-0.37139068, 0.9284767];
-    res.unit.forEach((d, i) => expect(d).toBeCloseTo(expected[i]));
-
-    res = descr([10, -3, 1], [8, 2, 0], new Vector());
-    expect(res.vector).toBeInstanceOf(Vector);
-    expect(res.unit).toBeInstanceOf(Vector);
-    expect(res.vector.x).toBe(-2);
-    expect(res.vector.y).toBe(5);
-    expect(res.vector.z).toBe(-1);
-    expect(res.sqr).toBe(30);
-    expect(res.dist).toBeCloseTo(5.4772256);
-  });
-
-  it('should find the an orthogonal unit vector', () => {
-    expect(orth2([0, 1])).toEqual([-1, 0]);
-    expect(orth2([1, 0])).toEqual([-0, 1]);
-
-    let expected = [-1 / Math.sqrt(2), 1 / Math.sqrt(2)];
-    orth2([1, 1]).forEach((v, i) => expect(v).toBeCloseTo(expected[i]));
-
-    expected = [-2 / Math.sqrt(20), 4 / Math.sqrt(20)];
-    orth2([4, 2]).forEach((v, i) => expect(v).toBeCloseTo(expected[i]));
-
-    expected = [0.049938, -0.99875];
-
-    const vector = vec([10, 2], [-10, 1]);
-    orth2(vector).forEach((v, i) => expect(v).toBeCloseTo(expected[i]));
-  });
-
-  it('should be able to calculate the vector dot product', () => {
+  it('Should be able to calculate the vector dot product', () => {
     expect(dot([2, -2, 1], [-3.5, 1.5, -3])).toBe(-13);
     expect(dot([1, 2, 2, 0], [3, -4, 0, -1])).toBe(-5);
     expect(dot([0.1, 2, -1.4, 2], [2, 0.2, 2, 2.83])).toBeCloseTo(3.46, 5);
   });
 
-  it('should be able to calculate the psudo cross product of 2d vectors', () => {
+  it('Should be able to calculate the psudo cross product of 2d vectors', () => {
     expect(cross2(vec2(1, 2), vec2(1, 0))).toBe(-2);
     expect(cross2(vec2(1, 2), [-5, 2])).toBe(12);
     expect(cross2([1, 0], vec2(0, 1))).toBe(1);
     expect(cross2([2, 0], [1, 0])).toBe(0);
   });
 
-  it('should be able to find the cross and triple product of 3d vectors', () => {
+  it('Should be able to find the cross and triple product of 3d vectors', () => {
     expect(cross([1, 0, 0], [0, 1, 0])).toEqual([0, 0, 1]);
 
     const i = vec3(1, 0, 0);
@@ -292,16 +256,6 @@ describe('functions.js', () => {
     expect(triple(k, i, j)).toBe(k.dot(i.cross(j)));
   });
 
-  it('Can find angles of 2d vectors', () => {
-    expect(angle2(vec2(1, 0))).toBe(0);
-    expect(angle2(vec2(1, 1))).toBe(Math.PI / 4);
-    expect(angle2(vec2(0, 1))).toBe(Math.PI / 2);
-    expect(angle2(vec2(-1, 0))).toBe(Math.PI);
-    expect(angle2(vec2(-1, -1))).toBe(-0.75 * Math.PI);
-    expect(angle2(vec2(0, -1))).toBe(-0.5 * Math.PI);
-    expect(angle2(vec2(0, 0))).toBe(0);
-  });
-
   it('Can find angles of 3d vectors', () => {
     const v = new Vector(2, 1, 2, 0);
 
@@ -313,7 +267,7 @@ describe('functions.js', () => {
     expect(angle(v, -1)).toBeUndefined();
   });
 
-  it('should be able to clamp values and vectors/arrays', () => {
+  it('Should be able to clamp values and vectors/arrays', () => {
     expect(clamp(-1, 0, 1)).toBe(0);
     expect(clamp(2, 0, 1)).toBe(1);
     expect(clamp(2, 0, 3)).toBe(2);
@@ -414,7 +368,7 @@ describe('functions.js', () => {
     expect(nrad(-TAU - SPI)).toBe(TAU - SPI);
   });
 
-  it('can create a sequence of interpolated values', () => {
+  it('Can create a sequence of interpolated values', () => {
     let a = 100;
     let b = 450;
 
@@ -452,7 +406,7 @@ describe('functions.js', () => {
 
   });
 
-  it('should allow easy check for null vectors', () => {
+  it('Should allow easy check for null vectors', () => {
     expect(isNullVec([0, 0, 0])).toBeTruthy();
     expect(isNullVec([-0, -0, -0])).toBeTruthy();
     expect(isNullVec([-1, -2, -3])).toBeFalsy();

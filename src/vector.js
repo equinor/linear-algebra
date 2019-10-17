@@ -12,7 +12,7 @@ import {
   cross,
   cross2,
   dist,
-  scalar,
+  magnitude,
   isNullVec,
 } from './functions';
 import { flattenList } from './utils';
@@ -33,7 +33,6 @@ const accessors = ({
  *
  * Instantiate a vector by its constructor or using one of the factory functions (vec2, vec3...)
  */
-
 export class Vector extends Array {
   /**
    * Instantiate a vector from an array.
@@ -51,9 +50,9 @@ export class Vector extends Array {
    */
   add(...vectors) {
     if (vectors.length === 1) {
-      return add(this, vectors[0]);
+      return add(this, vectors[0], new Vector(this.length));
     }
-    return addAll(vectors, this);
+    return addAll([this, ...vectors], this.slice(0));
   }
 
   /**
@@ -73,7 +72,7 @@ export class Vector extends Array {
    */
   sub(...vectors) {
     if (vectors.length === 1) {
-      return sub(this, vectors[0]);
+      return sub(this, vectors[0], new Vector(this.length));
     }
     return subAll(this, vectors);
   }
@@ -93,8 +92,8 @@ export class Vector extends Array {
    * Calculate the scalar product (length) of this vector.
    * @return {number}
    */
-  scalar() {
-    return scalar(this);
+  get magnitude() {
+    return magnitude(this);
   }
 
   /**
