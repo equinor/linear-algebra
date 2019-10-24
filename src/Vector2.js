@@ -347,12 +347,12 @@ export class Vector2 extends Array {
   static get one() { return new Vector2(1, 1); }
 
   /**
-   * @returns Vector2 with values: [Infinity, Infinity]
+   * @returns Vector2 with values: [∞, ∞]
    */
   static get positiveInfinity() { return new Vector2(Infinity, Infinity); }
 
   /**
-   * @returns Vector2 with values: [-Infinity, -Infinity]
+   * @returns Vector2 with values: [-∞, -∞]
    */
   static get negativeInfinity() { return new Vector2(-Infinity, -Infinity); }
 
