@@ -5,8 +5,9 @@ import pkg from './package.json';
 const input = {
   index: 'src/index.js',
   functions: 'src/functions.js',
-  vector: 'src/vector.js',
-  matrix: 'src/matrix.js',
+  Vector: 'src/Vector.js',
+  Vector2: 'src/Vector2.js',
+  Matrix: 'src/Matrix.js',
 };
 
 export default [

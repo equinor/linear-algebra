@@ -13,7 +13,7 @@
       "actualCount": 37,
       "undocumentLines": []
     },
-    "src/matrix.js": {
+    "src/Matrix.js": {
       "expectCount": 38,
       "actualCount": 38,
       "undocumentLines": []
@@ -23,7 +23,7 @@
       "actualCount": 4,
       "undocumentLines": []
     },
-    "src/vector.js": {
+    "src/Vector.js": {
       "expectCount": 24,
       "actualCount": 24,
       "undocumentLines": []

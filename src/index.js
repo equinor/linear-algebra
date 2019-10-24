@@ -1,4 +1,5 @@
-export * from './vector';
-export * from './matrix';
+export * from './Vector';
+export * from './Vector2';
+export * from './Matrix';
 export * from './functions';
 export * from './const';

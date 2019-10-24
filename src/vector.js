@@ -7,10 +7,9 @@ import {
   subAll,
   subScaled,
   scale,
-  norm,
+  normalize,
   dot,
   cross,
-  cross2,
   dist,
   magnitude,
   isNullVec,
@@ -121,7 +120,7 @@ export class Vector extends Array {
    * @return {Vector}
    */
   normalize(target = null) {
-    return norm(this, target || this);
+    return normalize(this, target || this);
   }
 
   /**
@@ -142,16 +141,6 @@ export class Vector extends Array {
    */
   cross(other, target = null) {
     return cross(this, other, target);
-  }
-
-  /**
-   * Calculate the psudo cross product between this vector and the passed in argument.
-   * Only for 2d vectors!
-   * @param {number[]} other 2d vector
-   * @return {number} psudo cross product
-   */
-  cross2(other) {
-    return cross2(this, other);
   }
 
   /**
