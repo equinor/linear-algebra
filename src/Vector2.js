@@ -1,4 +1,4 @@
-import { RAD2DEG, DEG2RAD } from './const';
+import { RAD2DEG, DEG2RAD } from './utils/const';
 
 import {
   add,
@@ -7,7 +7,7 @@ import {
   magnitude,
   normalize,
   dot,
-} from './functions';
+} from './utils/functions';
 
 import {
   distance,
@@ -20,7 +20,7 @@ import {
   lerp,
   lerpRot,
   cross,
-} from './functions2D';
+} from './utils/functions2D';
 
 /**
  * Vector2 defines a 2-dimensional vector. It extends the array class,

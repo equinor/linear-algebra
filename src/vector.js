@@ -13,8 +13,8 @@ import {
   dist,
   magnitude,
   isNullVec,
-} from './functions';
-import { flattenList } from './utils';
+} from './utils/functions';
+import { flattenList } from './utils/utils';
 
 /** mapping of additional accessors to array index */
 const accessors = ({

@@ -1,5 +1,5 @@
-import { rowsToColumns } from './utils';
-import { scale } from './functions';
+import { rowsToColumns } from './utils/utils';
+import { scale } from './utils/functions';
 
 /**
  * A class for storing values in rows and columns and for doing
@@ -486,10 +486,11 @@ export class Matrix extends Array {
 
     if (this.rows === 2) {
       return this[0] * this[3] - this[2] * this[1];
-    } else if (this.rows === 3) {
-      return this[0] * this[4] * this[8] - this[6] * this[4] * this[2] +
-        this[3] * this[7] * this[2] - this[0] * this[7] * this[5] +
-        this[6] * this[1] * this[5] - this[3] * this[1] * this[8];
+    }
+    if (this.rows === 3) {
+      return this[0] * this[4] * this[8] - this[6] * this[4] * this[2]
+        + this[3] * this[7] * this[2] - this[0] * this[7] * this[5]
+        + this[6] * this[1] * this[5] - this[3] * this[1] * this[8];
     }
 
     function determinantRec(m) {
@@ -557,12 +558,12 @@ export class Matrix extends Array {
    */
   toArray2d(rowsFirst = false) {
     const res = new Array(rowsFirst ? this.rows : this.columns);
-    const cf = rowsFirst ?
-      (v, i, r, c) => {
+    const cf = rowsFirst
+      ? (v, i, r, c) => {
         if (!res[r]) res[r] = new Array(this.columns);
         res[r][c] = v;
-      } :
-      (v, i, r, c) => {
+      }
+      : (v, i, r, c) => {
         if (!res[c]) res[c] = new Array(this.rows);
         res[c][r] = v;
       };

@@ -65,12 +65,13 @@ export function flattenList(arg = [], flattend = [], max = 0) {
  * list.
  */
 export function immutable(fn) {
-  if (!fn.toString().includes('var target='))
-    throw Error('Unable to create an immutable version of this function!');
+  if (!fn.toString().includes('var target=')) throw Error(
+    'Unable to create an immutable version of this function!',
+  );
+
   return function wrapper(...args) {
-    if (args.length === 0) {
-      return fn([]);
-    } else if (Array.isArray(args[0])) {
+    if (args.length === 0) return fn([]);
+    if (Array.isArray(args[0])) {
       return fn(...args, args[0].slice());
     }
     throw Error('Unable to execute immutable function!');

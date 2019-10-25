@@ -346,7 +346,7 @@ export function stepValue(edge, x) {
  * @return {number[]} results for each value in edges
  */
 export function stepArray(edges, x, target = null) {
-  const m = Array.isArray(x) ? i => x[i] : () => x;
+  const m = Array.isArray(x) ? (i) => x[i] : () => x;
   target = target || edges;
   for (let i = 0; i < target.length; i++) {
     target[i] = stepValue(target[i], m(i));
@@ -402,7 +402,7 @@ export function lerp(a, b, t) {
  * @return {number[]} interpolated array/vector/matrix
  */
 export function mix(a, b, t, target = null) {
-  const m = Array.isArray(t) ? i => t[i] : () => t;
+  const m = Array.isArray(t) ? (i) => t[i] : () => t;
   target = target || a;
   for (let i = 0; i < target.length; i++) {
     target[i] = lerp(a[i], b[i], m(i));
@@ -423,9 +423,9 @@ export function mix(a, b, t, target = null) {
 export function seq(from, to, steps, start = 0, end = 1) {
   let f;
   if (Array.isArray(from)) {
-    f = t => mix(from, to, t, from.slice());
+    f = (t) => mix(from, to, t, from.slice());
   } else {
-    f = t => lerp(from, to, t);
+    f = (t) => lerp(from, to, t);
   }
   const target = [];
   const incr = (end - start) / (steps - 1);
@@ -444,12 +444,12 @@ export function seq(from, to, steps, start = 0, end = 1) {
  * @param {number} steps interpolation steps
  */
 export function seqI(steps) {
-  const target = [];
+  const target = new Array(steps);
   const incr = 1 / (steps - 1);
   for (let i = 0; i < steps - 1; i++) {
-    target.push(lerp(0, 1, i * incr));
+    target[i] = i * incr;
   }
-  target.push(1);
+  target[steps - 1] = 1;
   return target;
 }
 
@@ -501,10 +501,13 @@ export function nrad(r) {
 }
 
 /**
- * Test if a vector is a null vector
+ * Test if all elements of a vector is null
  * @param {number[]} v vector to test
  * @param {number} epsilon optional epsilon value
  */
 export function isNullVec(v, epsilon = 0) {
-  return epsilon ? v.every(val => Math.abs(val) - epsilon <= 0) : v.every(val => val === 0);
+  for (let i = 0; i < v.length; i++) {
+    if (Math.abs(v[i]) > epsilon) return false;
+  }
+  return true;
 }
