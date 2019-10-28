@@ -1,0 +1,16 @@
+{
+  "name": "@equinor/videx-math",
+  "version": "0.0.1-alpha",
+  "description": "Math library.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "https://github.com/equinor/videx-linear-algebra",
+  "keywords": [ "math" ],
+  "contributors": [
+    "Kjerand Pedersen",
+    "Tom Kristian Tjemsland"
+  ],
+  "license": "MIT"
+}
