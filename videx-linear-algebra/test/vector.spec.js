@@ -1,7 +1,6 @@
 import expect from 'expect';
 import { Vector, nvec, vec2, vec3, vec4 } from '../src/Vector';
 
-
 describe('Vector.js', () => {
   it('Should be possible to instantiate and assign values using factory functions', () => {
     expect(vec3()).toEqual([0, 0, 0]);

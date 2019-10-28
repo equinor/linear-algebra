@@ -1,6 +1,6 @@
 import expect from 'expect';
-import { Matrix } from '../src/matrix';
-import { vec2, vec3, Vector } from '../src/vector';
+import { Matrix } from '../src/Matrix';
+import { vec2, vec3, Vector } from '../src/Vector';
 
 describe('some example use cases', () => {
   it('Can transform from one dimension to another', () => {

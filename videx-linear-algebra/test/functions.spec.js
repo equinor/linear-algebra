@@ -29,12 +29,11 @@ import {
   seqI,
   isNullVec,
   magnitude,
-} from '../src/functions';
+} from '../src/utils/functions';
 import {
-  angle as angle2,
   cross as cross2,
-} from '../src/functions2D';
-import { PI, TAU, SPI, QPI } from '../src/const';
+} from '../src/2D/functions';
+import { PI, TAU, SPI, QPI } from '../src/utils/const';
 import { Vector, vec2, vec3, vec4 } from '../src/Vector';
 import { Matrix, mat2 } from '../src/Matrix';
 
@@ -414,4 +413,3 @@ describe('functions.js', () => {
     expect(isNullVec([-0.00001, -0, -0], 0.001)).toBeTruthy();
   });
 });
-

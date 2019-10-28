@@ -1,8 +1,8 @@
 {
   "private": false,
   "name": "@equinor/videx-linear-algebra",
-  "version": "0.0.2-alpha",
-  "description": "Math library for doing basic linear algebra operations",
+  "version": "0.0.7-alpha",
+  "description": "Math library for performing linear algebra.",
   "repository": "https://github.com/equinor/videx-linear-algebra",
   "contributors": [
     "Kjerand Pedersen",
@@ -21,9 +21,8 @@
     "3d",
     "4d"
   ],
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "browser": "dist/linear-algebra.min.js",
+  "main": "dist/bundle.cjs.js",
+  "module": "dist/bundle.esm.js",
   "devDependencies": {
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
@@ -44,6 +43,7 @@
     "rollup-plugin-uglify": "^6.0.3"
   },
   "scripts": {
+    "prebuild": "rimraf dist",
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "coverage": "NODE_ENV=test npx nyc --reporter=html --reporter=text mocha --require @babel/register",
@@ -56,5 +56,8 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "rimraf": "^3.0.0"
+  }
 }

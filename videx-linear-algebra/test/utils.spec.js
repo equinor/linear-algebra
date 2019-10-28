@@ -2,8 +2,8 @@ import expect from 'expect';
 import {
   flattenList,
   rowsToColumns,
-} from '../src/utils';
-import { vec2, vec3, vec4 } from '../src/vector';
+} from '../src/utils/utils';
+import { vec2, vec3, vec4 } from '../src/Vector';
 
 describe('utils.js', () => {
   it('should be able to transpose rows to columns where 2d data are stored in 1d arrays', () => {

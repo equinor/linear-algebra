@@ -20,7 +20,7 @@ import {
   lerp,
   lerpRot,
   cross,
-} from './utils/functions2D';
+} from './2D/functions';
 
 /**
  * Vector2 defines a 2-dimensional vector. It extends the array class,
