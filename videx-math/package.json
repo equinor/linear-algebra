@@ -7,10 +7,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": "https://github.com/equinor/videx-linear-algebra",
-  "keywords": [ "math" ],
+  "keywords": [
+    "math"
+  ],
   "contributors": [
     "Kjerand Pedersen",
     "Tom Kristian Tjemsland"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^6.6.0"
+  }
 }
