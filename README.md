@@ -1,3 +1,6 @@
+# Archived on 24.10.2023
+No longer maintained, see [new repository](https://github.com/equinor/videx-linear-algebra)
+
 # Linear algebra
 
 Math library for doing basic linear algebra operations, inspired by GLSL.
